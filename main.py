@@ -25,9 +25,9 @@ async def handle_post(data: DataRequest):
 
         response = DataResponse(
             is_success=True,
-            user_id="john_doe_17091999",
-            email="john@xyz.com",
-            roll_number="ABCD123",
+            user_id="mothies-m",
+            email="mm2610@srmist.edu.in",
+            roll_number="RA2111003050043",
             numbers=numbers,
             alphabets=alphabets,
             highest_alphabet=highest_alphabet
