@@ -1,10 +1,25 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field, validator
 from typing import List, Optional
 import base64
 import filetype
 
 app = FastAPI()
+
+#
+origins = [
+    "http://localhost:5173",
+    "https://front-end-six-coral.vercel.app/",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 class DataRequest(BaseModel):
     data: List[str] = Field(...)
@@ -59,11 +74,7 @@ async def handle_post(request: DataRequest):
             try:
                 file_bytes = base64.b64decode(request.file_b64, validate=True)
                 kind = filetype.guess(file_bytes)
-                if kind:
-                    mime_type = kind.mime
-                else:
-                    mime_type = "application/octet-stream"
-
+                mime_type = kind.mime if kind else "application/octet-stream"
                 size_kb = str((len(file_bytes) + 1023) // 1024)
                 file_valid = True
             except (base64.binascii.Error, ValueError):
